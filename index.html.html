@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentMate | Rent Smart. Learn More. Spend Less.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        accent: {
+                            50: '#ecfdf5',
+                            500: '#10b981',
+                            600: '#059669',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom smooth styling and scrollbar */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#6366f1 0.75px, transparent 0.75px), radial-gradient(#6366f1 0.75px, #f8fafc 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Custom Notification Modal (No alert() used) -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-300" id="modal-content">
+            <div class="flex items-center space-x-3 text-brand-600 mb-3">
+                <div class="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-xl">
+                    <i id="modal-icon" class="fa-solid fa-info-circle"></i>
+                </div>
+                <h3 id="modal-title" class="text-lg font-bold text-slate-900">Notification</h3>
+            </div>
+            <p id="modal-message" class="text-slate-600 mb-6 text-sm leading-relaxed">Message goes here...</p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition shadow-lg shadow-brand-500/20">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#home" class="flex items-center space-x-3 group">
+                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-600 to-accent-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition">
+                    <i class="fa-solid fa-book-bookmark text-xl"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-brand-700 to-brand-500 bg-clip-text text-transparent">RentMate</span>
+                    <span class="block text-[10px] uppercase tracking-widest font-semibold text-slate-400">Startup Project</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
+                <a href="#home" class="hover:text-brand-600 transition">Home</a>
+                <a href="#about" class="hover:text-brand-600 transition">About Us</a>
+                <a href="#resources" class="hover:text-brand-600 transition">Resources</a>
+                <a href="#benefits" class="hover:text-brand-600 transition">Benefits</a>
+                <a href="#how-it-works" class="hover:text-brand-600 transition">How It Works</a>
+                <a href="#contact" class="hover:text-brand-600 transition">Contact Us</a>
+            </nav>
+
+            <!-- Action Button -->
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#contact" class="bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5 rounded-xl text-sm transition shadow-lg shadow-brand-500/20">
+                    Get in Touch
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-slate-600 hover:text-brand-600 focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-3">
+            <a href="#home" class="block py-2 text-slate-600 hover:text-brand-600 font-medium mobile-link">Home</a>
+            <a href="#about" class="block py-2 text-slate-600 hover:text-brand-600 font-medium mobile-link">About Us</a>
+            <a href="#resources" class="block py-2 text-slate-600 hover:text-brand-600 font-medium mobile-link">Resources</a>
+            <a href="#benefits" class="block py-2 text-slate-600 hover:text-brand-600 font-medium mobile-link">Benefits</a>
+            <a href="#how-it-works" class="block py-2 text-slate-600 hover:text-brand-600 font-medium mobile-link">How It Works</a>
+            <a href="#contact" class="block py-2 text-slate-600 hover:text-brand-600 font-medium mobile-link">Contact Us</a>
+            <div class="pt-2">
+                <a href="#contact" class="block text-center bg-brand-600 text-white font-medium py-2.5 rounded-xl text-sm mobile-link">Get in Touch</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-pattern py-20 lg:py-32 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 text-center lg:text-left">
+                    <div class="inline-flex items-center space-x-2 bg-brand-50 border border-brand-100 px-3.5 py-1.5 rounded-full text-brand-700 text-xs font-semibold mb-6 shadow-sm">
+                        <i class="fa-solid fa-sparkles"></i>
+                        <span>Rent Smart. Learn More. Spend Less.</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-6">
+                        Rent What You Need. <span class="bg-gradient-to-r from-brand-600 to-accent-500 bg-clip-text text-transparent">Keep More Money.</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-600 mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        RentMate is a proposed student-focused startup project designed to help college students access essential academic resources without purchasing expensive items they only need for a semester or a few days.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#resources" class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-4 rounded-xl text-center transition shadow-xl shadow-brand-500/25 flex items-center justify-center space-x-2">
+                            <span>Explore Resources</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="#contact" class="w-full sm:w-auto bg-white hover:bg-slate-50 text-slate-700 font-semibold px-8 py-4 rounded-xl text-center transition border border-slate-300 shadow-sm flex items-center justify-center space-x-2">
+                            <span>Contact Us</span>
+                            <i class="fa-regular fa-envelope text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Academic Visual Illustration Placeholder -->
+                <div class="lg:col-span-5">
+                    <div class="relative bg-gradient-to-br from-brand-500/10 to-accent-500/10 p-2 rounded-3xl border border-brand-100 shadow-2xl">
+                        <div class="bg-white rounded-2xl p-6 sm:p-8 space-y-6">
+                            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                                </div>
+                                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">RentMate Portal Preview</span>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 bg-indigo-100 text-brand-600 rounded-xl flex items-center justify-center text-xl mb-3 shadow-sm">
+                                        <i class="fa-solid fa-book"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800">Textbooks</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Semester rentals</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 bg-emerald-100 text-accent-600 rounded-xl flex items-center justify-center text-xl mb-3 shadow-sm">
+                                        <i class="fa-solid fa-calculator"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800">Calculators</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Lab & exam ready</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center text-xl mb-3 shadow-sm">
+                                        <i class="fa-solid fa-vest"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800">Lab Coats</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Practical sessions</p>
+                                </div>
+                                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-xl mb-3 shadow-sm">
+                                        <i class="fa-solid fa-drafting-compass"></i>
+                                    </div>
+                                    <h4 class="font-semibold text-sm text-slate-800">Drawing Kits</h4>
+                                    <p class="text-xs text-slate-500 mt-1">Engineering tools</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-50 p-4 rounded-xl border border-brand-100 text-center">
+                                <p class="text-xs text-brand-800 font-medium"><i class="fa-solid fa-circle-info mr-1.5"></i> Proposed project model. No active transactions yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About RentMate Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">About RentMate</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Solving Student Resource Challenges</h2>
+                <div class="w-20 h-1.5 bg-brand-600 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                    College students often need expensive academic resources for a short period. Purchasing these items can be costly when they are needed for only one semester, a laboratory session, or a project.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-6">
+                    <div class="w-14 h-14 bg-brand-600 text-white rounded-2xl flex items-center justify-center text-2xl shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-900">Our Core Purpose</h3>
+                    <p class="text-slate-600 leading-relaxed">
+                        RentMate aims to make academic resources more affordable and accessible by helping students connect with suitable rental or borrowing options within their college community.
+                    </p>
+                    <div class="pt-4 border-t border-slate-200">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Startup Status</span>
+                        <p class="text-sm font-semibold text-slate-700 mt-1">Proposed Student Entrepreneurship Project</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-brand-900 to-brand-800 text-white p-8 sm:p-10 rounded-3xl shadow-xl space-y-6 relative overflow-hidden">
+                    <div class="absolute -right-10 -bottom-10 text-white/5 text-9xl pointer-events-none">
+                        <i class="fa-solid fa-quote-right"></i>
+                    </div>
+                    <div class="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-xs font-semibold text-brand-200">
+                        <i class="fa-solid fa-flag"></i>
+                        <span>Mission Statement</span>
+                    </div>
+                    <blockquote class="text-xl sm:text-2xl font-medium leading-relaxed italic text-brand-50">
+                        “Our mission is to make academic resources affordable, accessible, and convenient for every college student.”
+                    </blockquote>
+                    <p class="text-sm text-brand-200/80">
+                        Empowering students to focus on learning and innovation rather than worrying about heavy textbook and equipment costs.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Resources Section -->
+    <section id="resources" class="py-20 bg-slate-50/70 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">Proposed Categories</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Academic Resource Categories</h2>
+                <div class="w-20 h-1.5 bg-brand-600 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                    Explore our proposed resource categories tailored for college students. Note: These are conceptual listings; prices, stock, and rentals are not yet active.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1: Textbooks -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-indigo-50 text-brand-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Textbooks</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            Find textbooks needed for particular subjects or semesters without buying brand-new copies every term.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg mb-4 font-medium flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Proposed Category (No Live Listings)
+                        </div>
+                        <button onclick="openModal('Textbooks', 'Textbooks category represents proposed semester rentals for core subjects. Real listings will appear when the platform launches.')" class="w-full bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold py-3 rounded-xl text-sm transition flex items-center justify-center space-x-2">
+                            <span>Explore Category</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 2: Scientific Calculators -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-emerald-50 text-accent-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="fa-solid fa-calculator"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Scientific Calculators</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            Discover calculators for examinations, laboratory work, and advanced engineering calculations.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg mb-4 font-medium flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Proposed Category (No Live Listings)
+                        </div>
+                        <button onclick="openModal('Scientific Calculators', 'Scientific Calculators category is designed for short-term exam and lab needs. Real inventory will be populated post-launch.')" class="w-full bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold py-3 rounded-xl text-sm transition flex items-center justify-center space-x-2">
+                            <span>Explore Category</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 3: Lab Coats -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="fa-solid fa-vest"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Lab Coats</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            Find clean and compliant lab coats needed for chemistry, biology, and engineering practical sessions.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg mb-4 font-medium flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Proposed Category (No Live Listings)
+                        </div>
+                        <button onclick="openModal('Lab Coats', 'Lab Coats category aims to provide affordable safety wear for practical classes. Actual rentals are currently unavailable.')" class="w-full bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold py-3 rounded-xl text-sm transition flex items-center justify-center space-x-2">
+                            <span>Explore Category</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 4: Engineering Drawing Kits -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between">
+                    <div>
+                        <div class="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="fa-solid fa-drafting-compass"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Engineering Drawing Kits</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            Discover drawing instruments and precision kits required for engineering drawing and graphics classes.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg mb-4 font-medium flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Proposed Category (No Live Listings)
+                        </div>
+                        <button onclick="openModal('Engineering Drawing Kits', 'Engineering Drawing Kits category helps students borrow precise tools for technical graphics. Not yet operational.')" class="w-full bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold py-3 rounded-xl text-sm transition flex items-center justify-center space-x-2">
+                            <span>Explore Category</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 5: Project Equipment -->
+                <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between md:col-span-2 lg:col-span-1">
+                    <div>
+                        <div class="w-14 h-14 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="fa-solid fa-microchip"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Project Equipment</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                            Explore hardware modules, sensors, and specialty tools needed for capstone and semester academic projects.
+                        </p>
+                    </div>
+                    <div>
+                        <div class="bg-amber-50 border border-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg mb-4 font-medium flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5"></i> Proposed Category (No Live Listings)
+                        </div>
+                        <button onclick="openModal('Project Equipment', 'Project Equipment category is proposed for hardware and maker tools. No rental database or inventory is active yet.')" class="w-full bg-slate-100 hover:bg-brand-600 hover:text-white text-slate-700 font-semibold py-3 rounded-xl text-sm transition flex items-center justify-center space-x-2">
+                            <span>Explore Category</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">Why RentMate</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Key Benefits for Students</h2>
+                <div class="w-20 h-1.5 bg-brand-600 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                    Designed from the ground up to solve financial strain and resource scarcity in college life.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Benefit 1 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/80 hover:border-brand-300 transition">
+                    <div class="w-12 h-12 bg-brand-600 text-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Affordable</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Avoid purchasing expensive academic items needed only temporarily for a semester or single project.
+                    </p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/80 hover:border-brand-300 transition">
+                    <div class="w-12 h-12 bg-brand-600 text-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Convenient</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Discover academic resource options easily in one centralized student-focused platform.
+                    </p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/80 hover:border-brand-300 transition">
+                    <div class="w-12 h-12 bg-brand-600 text-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Student-Friendly</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Designed around college students' schedules, campus lifestyles, and budget constraints.
+                    </p>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/80 hover:border-brand-300 transition">
+                    <div class="w-12 h-12 bg-accent-600 text-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-md shadow-accent-500/20">
+                        <i class="fa-solid fa-recycle"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Reduced Waste</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Encourage the sustainable reuse of academic resources instead of discarding books and tools after use.
+                    </p>
+                </div>
+
+                <!-- Benefit 5 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/80 hover:border-brand-300 transition md:col-span-2 lg:col-span-2">
+                    <div class="w-12 h-12 bg-accent-600 text-white rounded-xl flex items-center justify-center text-xl mb-6 shadow-md shadow-accent-500/20">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3">Time-Saving</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Make finding suitable academic resources effortless, saving valuable study time during busy academic terms.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-400 font-semibold text-sm uppercase tracking-wider">Proposed Process</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold mt-2 mb-4">How RentMate Will Work</h2>
+                <div class="w-20 h-1.5 bg-brand-500 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-300 text-base sm:text-lg leading-relaxed">
+                    A simple 3-step process proposed for our future operational model.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <!-- Step 1 -->
+                <div class="bg-slate-800/80 border border-slate-700 p-8 rounded-3xl relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-brand-600 rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg">
+                        01
+                    </div>
+                    <h3 class="text-xl font-bold mt-4 mb-3">Find a Resource</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Explore the academic resource category you need for your semester, lab work, or project.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-slate-800/80 border border-slate-700 p-8 rounded-3xl relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-brand-600 rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg">
+                        02
+                    </div>
+                    <h3 class="text-xl font-bold mt-4 mb-3">Connect and Arrange</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Connect with a suitable resource owner and agree on clear rental or borrowing terms.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-slate-800/80 border border-slate-700 p-8 rounded-3xl relative">
+                    <div class="absolute -top-4 -left-4 w-12 h-12 bg-brand-600 rounded-2xl flex items-center justify-center font-bold text-xl shadow-lg">
+                        03
+                    </div>
+                    <h3 class="text-xl font-bold mt-4 mb-3">Use and Return</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Use the resource for the agreed period and return it responsibly as arranged.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/60 border border-brand-500/30 p-6 rounded-2xl text-center max-w-2xl mx-auto">
+                <p class="text-sm text-brand-200">
+                    <i class="fa-solid fa-circle-info mr-2"></i> Note: These steps describe the proposed service. Actual rental transactions are not yet available as this is a startup project.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose RentMate Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-brand-600 to-brand-800 rounded-3xl p-8 sm:p-14 text-white shadow-2xl relative overflow-hidden">
+                <div class="max-w-3xl mx-auto text-center space-y-6">
+                    <span class="bg-white/10 text-brand-100 text-xs font-semibold px-3 py-1.5 rounded-full uppercase tracking-widest">
+                        Value Proposition
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                        Why Choose RentMate?
+                    </h2>
+                    <p class="text-brand-100 text-base sm:text-lg leading-relaxed">
+                        RentMate helps students avoid purchasing every academic item individually. We emphasize affordability, convenience, student-focused resource discovery, and temporary access to resources.
+                    </p>
+                    <blockquote class="text-xl sm:text-2xl font-bold text-white italic pt-4 border-t border-brand-500/50">
+                        “Get the academic resources you need, for the time you need them, without unnecessary spending.”
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Us & Form Section -->
+    <section id="contact" class="py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-brand-600 font-semibold text-sm uppercase tracking-wider">Get In Touch</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">Contact RentMate</h2>
+                <div class="w-20 h-1.5 bg-brand-600 mx-auto rounded-full mb-6"></div>
+                <p class="text-slate-600 text-base sm:text-lg leading-relaxed">
+                    Have questions about our startup project or want to collaborate? Reach out to us below!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <!-- Contact Details -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                        <h3 class="text-2xl font-bold text-slate-900">Project Information</h3>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg shrink-0 mt-1">
+                                <i class="fa-solid fa-folder-open"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Project Name</h4>
+                                <p class="text-slate-800 font-semibold text-lg">RentMate</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg shrink-0 mt-1">
+                                <i class="fa-regular fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Email Address</h4>
+                                <a href="mailto:bharu1ch23@gmail.com" class="text-brand-600 hover:underline font-semibold text-base">bharu1ch23@gmail.com</a>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg shrink-0 mt-1">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Phone Number</h4>
+                                <p class="text-slate-800 font-medium text-sm italic">[Your Contact Number — Optional]</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-lg shrink-0 mt-1">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Location</h4>
+                                <p class="text-slate-800 font-semibold text-base">Andhra Pradesh, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="lg:col-span-7">
+                    <div class="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm">
+                        <h3 class="text-2xl font-bold text-slate-900 mb-6">Send Us a Message</h3>
+                        
+                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                            <div>
+                                <label for="fullname" class="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
+                                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm transition">
+                                <p id="error-fullname" class="text-xs text-red-500 mt-1.5 hidden">Please enter your full name.</p>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email address" class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm transition">
+                                <p id="error-email" class="text-xs text-red-500 mt-1.5 hidden">Please enter a valid email address.</p>
+                            </div>
+
+                            <div>
+                                <label for="subject" class="block text-sm font-semibold text-slate-700 mb-2">Subject</label>
+                                <input type="text" id="subject" name="subject" placeholder="What is this regarding?" class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm transition">
+                                <p id="error-subject" class="text-xs text-red-500 mt-1.5 hidden">Please enter a subject.</p>
+                            </div>
+
+                            <div>
+                                <label for="message" class="block text-sm font-semibold text-slate-700 mb-2">Message</label>
+                                <textarea id="message" name="message" rows="4" placeholder="Write your message here..." class="w-full px-4 py-3.5 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm transition"></textarea>
+                                <p id="error-message" class="text-xs text-red-500 mt-1.5 hidden">Please enter your message.</p>
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-4 rounded-xl text-sm transition shadow-lg shadow-brand-500/20 flex items-center justify-center space-x-2">
+                                <span>Send Message</span>
+                                <i class="fa-solid fa-paper-plane text-xs"></i>
+                            </button>
+
+                            <p class="text-xs text-slate-500 text-center leading-relaxed">
+                                Note: Since no backend is configured, form submissions will not transmit data automatically. You can directly email us at <a href="mailto:bharu1ch23@gmail.com" class="text-brand-600 underline font-medium">bharu1ch23@gmail.com</a>.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section class="py-20 bg-brand-900 text-white text-center relative overflow-hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
+            <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                Make Student Life More Affordable with RentMate.
+            </h2>
+            <p class="text-brand-200 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+                Learn more about our proposed student startup project and join our mission to redefine academic resource accessibility.
+            </p>
+            <div class="pt-4">
+                <a href="#contact" class="inline-flex items-center space-x-2 bg-white text-brand-900 hover:bg-brand-50 font-bold px-8 py-4 rounded-xl text-base transition shadow-xl">
+                    <span>Get in Touch</span>
+                    <i class="fa-solid fa-arrow-right text-sm"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <!-- Col 1 -->
+                <div class="md:col-span-2 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-600 to-accent-500 flex items-center justify-center text-white shadow-md">
+                            <i class="fa-solid fa-book-bookmark"></i>
+                        </div>
+                        <span class="text-xl font-bold text-white tracking-tight">RentMate</span>
+                    </div>
+                    <p class="text-sm text-slate-400 italic">“Rent Smart. Learn More. Spend Less.”</p>
+                    <p class="text-xs text-slate-500 leading-relaxed max-w-sm">
+                        A proposed college entrepreneurship startup project helping students discover affordable academic rentals and borrowing options.
+                    </p>
+                </div>
+
+                <!-- Col 2 -->
+                <div>
+                    <h4 class="text-white text-sm font-semibold uppercase tracking-wider mb-4">Quick Links</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#home" class="hover:text-white transition">Home</a></li>
+                        <li><a href="#about" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="#resources" class="hover:text-white transition">Resources</a></li>
+                        <li><a href="#benefits" class="hover:text-white transition">Benefits</a></li>
+                        <li><a href="#how-it-works" class="hover:text-white transition">How It Works</a></li>
+                        <li><a href="#contact" class="hover:text-white transition">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3 -->
+                <div>
+                    <h4 class="text-white text-sm font-semibold uppercase tracking-wider mb-4">Contact Info</h4>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><i class="fa-regular fa-envelope mr-2 text-brand-500"></i> <a href="mailto:bharu1ch23@gmail.com" class="hover:text-white transition">bharu1ch23@gmail.com</a></li>
+                        <li><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i> Andhra Pradesh, India</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+                <p>&copy; <span id="copyright-year"></span> RentMate. All rights reserved. Proposed Startup Project.</p>
+                <p class="mt-2 sm:mt-0">Designed for Wadhwani Foundation Entrepreneurship Project</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Dynamic Copyright Year
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Custom Modal Functions
+        function openModal(title, message) {
+            const modal = document.getElementById('custom-modal');
+            const modalContent = document.getElementById('modal-content');
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            const modalContent = document.getElementById('modal-content');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        // Contact Form Validation and Submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            let isValid = true;
+
+            // Full Name validation
+            if (!fullname) {
+                document.getElementById('error-fullname').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-fullname').classList.add('hidden');
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                document.getElementById('error-email').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-email').classList.add('hidden');
+            }
+
+            // Subject validation
+            if (!subject) {
+                document.getElementById('error-subject').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-subject').classList.add('hidden');
+            }
+
+            // Message validation
+            if (!message) {
+                document.getElementById('error-message').classList.remove('hidden');
+                isValid = false;
+            } else {
+                document.getElementById('error-message').classList.add('hidden');
+            }
+
+            if (isValid) {
+                openModal('Message Prepared!', 'Thank you for your message! Since no backend is configured, please send your inquiry directly to bharu1ch23@gmail.com.');
+                document.getElementById('contact-form').reset();
+            }
+        }
+    </script>
+</body>
+</html>
